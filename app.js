@@ -9,6 +9,9 @@ const staticCache = require('koa-static-cache');
 const router = require('koa-router')();
 const path = require('path');
 const request = require('request');
+const mongoose = require('mongoose');
+const routers = require('./router/router');
+mongoose.connect('mongodb://localhost:27017/test');
 
 app.use(history({
 	verbose: true
@@ -37,6 +40,8 @@ if (app.env === 'development') {
 } else {
 	app.use(staticCache(path.join(__dirname, '/dist')));
 }
+
+app.use(routers.routes());
 
 app.use(async (ctx, next) => {
 	const start = Date.now();
