@@ -17,7 +17,7 @@ export const getList = async ctx => {
 
 function getData() {
 	return new Promise(function (resolve, reject) {
-		People.find({}, (err, data) => {
+		People.find((err, data) => {
 			if (err) {
 				reject(data);
 			} else {

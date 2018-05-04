@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<h1>基础增删查改</h1>
 		<table>
 			<tr>
 				<th>序号</th>
@@ -27,9 +28,15 @@
 			<form action="">
 				<input type="text" v-model="editItemObj.name"/>
 				<input type="text" v-model="editItemObj.age"/>
-				<button @click="confirmEditItem">保存</button>
+				<button type="button" @click="confirmEditItem">保存</button>
 			</form>
 		</div>
+		
+		<h1>Schemas methods</h1>
+		<div>{{info}}</div>
+		
+		<h1>virtual</h1>
+		<div>{{info1}}</div>
 	</div>
 </template>
 
@@ -42,11 +49,15 @@
 				age: 0,
 				list: [],
 				editItemObj: {},
-				isShowDialog: false
+				isShowDialog: false,
+				info: null,
+				info1: null
 			}
 		},
 		mounted() {
 			this.getList();
+			this.getInfo();
+			this.getBookFullInfo();
 		},
 		methods: {
 			async getList() {
@@ -54,6 +65,14 @@
 				if (result.resultCode === 0) {
 					this.list = result.list;
 				}
+			},
+			async getInfo() {
+				let result = await this.$get('/getBookInfo');
+				this.info = result;
+			},
+			async getBookFullInfo() {
+				let result = await this.$get('/getBookFullInfo');
+				this.info1 = result;
 			},
 			async addItem() {
 				let result = await this.$post('/addPeople', {
@@ -73,7 +92,7 @@
 				}
 			},
 			editItem(item) {
-				this.editItemObj = Object.assign({},item);
+				this.editItemObj = Object.assign({}, item);
 				this.isShowDialog = true;
 			},
 			async confirmEditItem() {
@@ -95,11 +114,12 @@
 <style lang="less">
 	.dialog {
 		width: 50%;
-		height: 400px;
-		background: #fff;
+		background: rgba(0, 0, 0, 0.4);
 		position: fixed;
 		z-index: 1000;
 		left: 50%;
+		top: 100px;
+		padding: 30px;
 		transform: translateX(-50%);
 	}
 </style>

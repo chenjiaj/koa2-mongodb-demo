@@ -11,7 +11,7 @@ const path = require('path');
 const request = require('request');
 const mongoose = require('mongoose');
 const routers = require('./router/router');
-mongoose.connect('mongodb://localhost:27017/test');
+mongoose.connect('mongodb://localhost:27017/test',{config: { autoIndex: false }});
 
 const con = mongoose.connection;
 con.on('error', console.error.bind(console, 'mongoose 连接数据库失败'));
