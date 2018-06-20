@@ -37,6 +37,12 @@
 		
 		<h1>virtual</h1>
 		<div>{{info1}}</div>
+		
+		<img src="../../static/images/add.png" alt="" style="with:100px;height: 100px;background-color: red">
+		
+		<img src="/api/getCode" alt="" style="with:100px;height: 100px;background-color: red">
+		
+		<img :src="imgSrc" alt="" style="with:100px;height: 100px;background-color: red">
 	</div>
 </template>
 
@@ -51,15 +57,57 @@
 				editItemObj: {},
 				isShowDialog: false,
 				info: null,
-				info1: null
+				info1: null,
+				imgSrc: ''
 			}
 		},
 		mounted() {
 			this.getList();
 			this.getInfo();
 			this.getBookFullInfo();
+			this.getImg();
+//			this.getImg1();
 		},
 		methods: {
+			getImg() {
+				var _this = this;
+				let xhr = new XMLHttpRequest();
+				xhr.open('post', '/getImg', false);
+				xhr.setRequestHeader('Content-type', 'image/png; charset=UTF-8');
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState == 4 && xhr.status == 200) {
+//						console.log(xhr.response)
+//						var blob = new Blob([xhr.response], {type: 'image/png'});
+//						console.log(blob);
+////						var a = new FileReader();
+////						a.onload = function (e) {
+////							console.log('-----', e.target.result);
+////							_this.imgSrc = e.target.result;
+////						}
+////						a.readAsDataURL(blob);
+//
+//											_this.imgSrc =  URL.createObjectURL(blob);
+//						console.log('--sss', URL.createObjectURL(blob));
+						_this.imgSrc = xhr.response;
+						var blob = new Blob([xhr.response], {type: 'image/png'})
+						
+					}
+				}
+				xhr.send();
+			},
+			getImg1() {
+				var _this = this;
+				let xhr = new XMLHttpRequest();
+				xhr.open('get', '/getCode', false);
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState == 4 && xhr.status == 200) {
+						console.log('--', xhr.response);
+						_this.imgSrc = "data:image/png;base64," + xhr.response;
+					}
+				}
+				
+				xhr.send();
+			},
 			async getList() {
 				let result = await this.$get('/getList');
 				if (result.resultCode === 0) {
